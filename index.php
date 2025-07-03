@@ -1,10 +1,23 @@
 <?php
 require 'dbconnect.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $stmt = $conn->prepare("INSERT INTO appointments (patient_name, phone, date, doctor) VALUES (?, ?, ?, ?)");
-  $stmt->bind_param("ssss", $_POST['patient_name'], $_POST['phone'], $_POST['date'], $_POST['doctor']);
+$sql = "SELECT MAX(CAST(appoint_id AS UNSIGNED)) AS last_id FROM appointments";
+$result = $conn->query($sql);
+
+$last_id = 40100; // Default start
+if ($row = $result->fetch_assoc()) {
+    if (!empty($row['last_id'])) {
+        $last_id = $row['last_id'];
+    }
+}
+$response='';
+// Generate next appoint_id
+$appoint_id = $last_id + 1;
+  
+  $stmt = $conn->prepare("INSERT INTO appointments (appoint_id,patient_name, phone, date, doctor) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("sssss",$appoint_id, $_POST['patient_name'], $_POST['phone'], $_POST['date'], $_POST['doctor']);
   $stmt->execute();
-  echo "Appointment booked successfully.";
+  $response=  "Appointment booked successfully.";
 }
 ?>
 
@@ -48,6 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Book Appointment Button -->
     <div class="text-center my-4">
+ <?php if ($response): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($response) ?></div>
+          <?php endif; ?>
         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#appointmentModal">
             Book an Appointment
         </button>

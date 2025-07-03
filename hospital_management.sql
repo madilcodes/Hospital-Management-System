@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `appointments`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `appointments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `appoint_id` varchar(20) NOT NULL DEFAULT '',
   `patient_name` varchar(100) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `date` date NOT NULL,
@@ -69,29 +70,62 @@ LOCK TABLES `attendance` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `lab_reports`
+-- Table structure for table `patient_history`
 --
 
-DROP TABLE IF EXISTS `lab_reports`;
+DROP TABLE IF EXISTS `patient_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lab_reports` (
+CREATE TABLE `patient_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `appoint_id` varchar(20) NOT NULL DEFAULT '',
   `patient_name` varchar(100) NOT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `doctor` varchar(20) NOT NULL DEFAULT '',
+  `diagnosis` varchar(20) NOT NULL DEFAULT '',
   `file_path` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `lab_reports`
+-- Dumping data for table `patient_history`
 --
 -- WHERE:  1 LIMIT 10
 
-LOCK TABLES `lab_reports` WRITE;
-/*!40000 ALTER TABLE `lab_reports` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lab_reports` ENABLE KEYS */;
+LOCK TABLES `patient_history` WRITE;
+/*!40000 ALTER TABLE `patient_history` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patient_history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `patients`
+--
+
+DROP TABLE IF EXISTS `patients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `patients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `patient_registration_id` varchar(20) NOT NULL DEFAULT '',
+  `name` varchar(100) NOT NULL,
+  `age` int(11) DEFAULT NULL,
+  `gender` enum('Male','Female','Other') DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `address` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `patients`
+--
+-- WHERE:  1 LIMIT 10
+
+LOCK TABLES `patients` WRITE;
+/*!40000 ALTER TABLE `patients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patients` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -124,7 +158,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Administrator','admin','$2y$10$37KEDuLd.z.ikgOTiUgGMua75FzsxYDcZXBbwwRqmZQvcP38qdJ/O','admin@gmail.com','9999999999','Admin','Head Office',0.00,'Admin');
+INSERT INTO `users` VALUES (1,'Admin user','admin','$2y$10$lPBgOU1VqlSAQ52aoSJ8p.KE4sr3aH59huQA4Ulb7JSHckSikbkNW','admin@gmail.com','99999999','Administrator','Head office',0.00,'Admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -137,4 +171,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-30 13:08:25
+-- Dump completed on 2025-07-03 14:52:50

@@ -75,8 +75,12 @@ if ($already_punched) {
 </head>
 <body>
 <div class="container dashboard-card">
-  <div class="card p-4">
-    <h2>Welcome, <?= htmlspecialchars($user['name']) ?>!</h2>
+  <div class="card p-3">
+<div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Welcome, <?= htmlspecialchars($user['name']) ?>!</h2>
+        <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
+      </div>
+<hr>
     <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
     <p><strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?></p>
     <p><strong>Designation:</strong> <?= htmlspecialchars($user['designation']) ?></p>
@@ -90,6 +94,5 @@ if ($already_punched) {
       <button name="action" value="punch_in" class="btn btn-success" <?= ($punch_in !== 'Not punched in yet') ? 'disabled' : '' ?>>Punch In</button>
       <button name="action" value="punch_out" class="btn btn-danger" <?= ($punch_in === 'Not punched in yet' || $punch_out !== 'Not punched out yet') ? 'disabled' : '' ?>>Punch Out</button>
     </form>
-    <a href="logout.php" class="btn btn-secondary mt-3">Logout</a>
   </div>
 </div>
