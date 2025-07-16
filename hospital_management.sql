@@ -143,6 +143,7 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `designation` varchar(50) DEFAULT NULL,
+  `specialty` varchar(50) DEFAULT NULL,
   `address` text,
   `salary` decimal(10,2) DEFAULT NULL,
   `employee_type` enum('Staff','Admin') NOT NULL,
@@ -158,7 +159,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin user','admin','$2y$10$lPBgOU1VqlSAQ52aoSJ8p.KE4sr3aH59huQA4Ulb7JSHckSikbkNW','admin@gmail.com','99999999','Administrator','Head office',0.00,'Admin');
+INSERT INTO `users` VALUES (1,'Admin','admin','$2y$10$IhQo7rzbu4/vV6PSqUeLO.rAEW7ftklVwWf2NaBkFEx61ctwCLH6K','admin@gmail.com','9999999999','Other','','Head office',0.00,'Admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -171,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-03 14:52:50
+-- Dump completed on 2025-07-16 19:09:41

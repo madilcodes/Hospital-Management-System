@@ -68,6 +68,9 @@ if ($already_punched) {
   <title>Staff Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body { background: #f8f9fa; }
     .dashboard-card { margin-top: 40px; }
@@ -81,18 +84,52 @@ if ($already_punched) {
         <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
       </div>
 <hr>
-    <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
-    <p><strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?></p>
-    <p><strong>Designation:</strong> <?= htmlspecialchars($user['designation']) ?></p>
-    <p><strong>Address:</strong> <?= htmlspecialchars($user['address']) ?></p>
-    <p><strong>Salary:</strong> ₹<?= htmlspecialchars($user['salary']) ?></p>
+    <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?> |
+    <strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?></p>
+    <p><strong>Designation:</strong> <?= htmlspecialchars($user['designation']) ?> |
+    <?php $user_specialty = $user['specialty']; ?>
+    <strong>Specialty:</strong> <?= htmlspecialchars($user_specialty) ?></p>
+    <p><strong>Address:</strong> <?= htmlspecialchars($user['address']) ?> |
+    <strong>Salary:</strong> ₹<?= htmlspecialchars($user['salary']) ?></p>
     <hr>
     <h5>Today's Attendance</h5>
-    <p><strong>Punch In:</strong> <?= htmlspecialchars($punch_in) ?></p>
-    <p><strong>Punch Out:</strong> <?= htmlspecialchars($punch_out) ?></p>
+    <p><strong>Clock In:</strong> <?= htmlspecialchars($punch_in) ?> |
+    <strong>Clock Out:</strong> <?= htmlspecialchars($punch_out) ?></p>
     <form method="POST" class="mt-3">
       <button name="action" value="punch_in" class="btn btn-success" <?= ($punch_in !== 'Not punched in yet') ? 'disabled' : '' ?>>Punch In</button>
       <button name="action" value="punch_out" class="btn btn-danger" <?= ($punch_in === 'Not punched in yet' || $punch_out !== 'Not punched out yet') ? 'disabled' : '' ?>>Punch Out</button>
     </form>
   </div>
+ <h4 class="mt-5 d-inline block">Patient Appointments</h4>
+    <button class="btn btn-success btn-sm ml-2" type="button" data-toggle="collapse" data-target="#showpatientForm"
+      aria-expanded="false" aria-controls="showpatientForm">+</button>
+    <div class="collapse mt-3" id="showpatientForm">
+      <table class="table table-bordered table-striped">
+        <tr class="table-active">
+          <th>AppointmentID</th>
+          <th>PatientName</th>
+          <th>Phone</th>
+          <th>AppointmentDate</th>
+          <th>Specialist</th>
+	  </tr>
+	  <?php
+	  $appointments = $conn->query("SELECT * FROM appointments WHERE doctor='$user_specialty' ORDER BY appoint_id ASC");
+	  ?>
+	  <?php if ($appointments->num_rows > 0): ?>
+	  <?php while ($row = $appointments->fetch_assoc()): ?>
+            <tr>
+              <td><?= htmlspecialchars($row['appoint_id']) ?></td>
+              <td><?= htmlspecialchars($row['patient_name']) ?></td>
+              <td><?= htmlspecialchars($row['phone']) ?></td>
+              <td><?= htmlspecialchars($row['date']) ?></td>
+              <td><?= htmlspecialchars($row['doctor']) ?></td>
+            </tr>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="5" class="text-center text-muted">No records</td>
+          </tr>
+        <?php endif; ?>
+      </table>
+    </div>
 </div>

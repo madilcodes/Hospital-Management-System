@@ -135,7 +135,38 @@ $(document).ready(function(){
     <input type="password" name="password" placeholder="Password" required class="form-control mb-2">
     <input type="text" name="email" placeholder="Email" class="form-control mb-2">
     <input type="text" name="phone" placeholder="Phone" class="form-control mb-2">
-    <input type="text" name="designation" placeholder="Designation" class="form-control mb-2">
+ <select name="designation" id="designationDropdown" class="form-control mb-2" required>
+          <option value="">Select Designation</option>
+          <option value="Doctor">Doctor</option>
+          <option value="Nurse">Nurse</option>
+          <option value="Receptionist">Receptionist</option>
+          <option value="Lab Technician">Lab Technician</option>
+          <option value="Pharmacist">Pharmacist</option>
+          <option value="Accountant">Accountant</option>
+          <option value="Cleaner">Cleaner</option>
+          <option value="Security">Security</option>
+          <option value="Other">Other</option>
+        </select>
+        <select name="specialty" id="specialtyDropdown" class="form-control mb-2" style="display:none;">
+          <option value="">Select Specialty</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="Neurology">Neurology</option>
+          <option value="Orthopedics">Orthopedics</option>
+          <option value="Pediatrics">Pediatrics</option>
+          <option value="Gastroenterology">Gastroenterology</option>
+          <option value="Oncology">Oncology</option>
+          <option value="Nephrology">Nephrology</option>
+          <option value="Urology">Urology</option>
+          <option value="Ophthalmology">Ophthalmology</option>
+          <option value="Dentistry">Dentistry</option>
+          <option value="Psychiatry">Psychiatry</option>
+          <option value="Radiology">Radiology</option>
+          <option value="Anesthesiology">Anesthesiology</option>
+          <option value="Endocrinology">Endocrinology</option>
+          <option value="Dermatology">Dermatology</option>
+          <option value="Pulmonology">Pulmonology</option>
+        </select>
+
     <input type="text" name="address" placeholder="Address" class="form-control mb-2">
     <input type="number" name="salary" placeholder="Salary" class="form-control mb-2">
     <button type="submit" class="btn btn-primary">Create User</button>
@@ -152,6 +183,7 @@ $(document).ready(function(){
         <th>Email</th>
         <th>Phone</th>
         <th>Designation</th>
+        <th>Specialty</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -165,6 +197,7 @@ $(document).ready(function(){
         <td><?= htmlspecialchars($row['email']) ?></td>
         <td><?= htmlspecialchars($row['phone']) ?></td>
         <td><?= htmlspecialchars($row['designation']) ?></td>
+        <td><?= htmlspecialchars($row['specialty']) ?></td>
         <td>
           <a href="edit_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"> <i class="fas fa-edit" title='Edit User'></i></a>
           <a href="delete_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this user?')"> <i class="fas fa-trash" title='Delete User'></i></a>
@@ -338,5 +371,31 @@ $(document).ready(function(){
   </table>
  </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var designation = document.getElementById('designationDropdown');
+    var specialty = document.getElementById('specialtyDropdown');
+    if (designation) {
+      designation.addEventListener('change', function () {
+        if (this.value === 'Doctor') {
+          specialty.style.display = '';
+          specialty.required = true;
+        } else {
+          specialty.style.display = 'none';
+          specialty.required = false;
+          specialty.value = '';
+        }
+      });
+      // On page load, set specialty visibility if editing
+      if (designation.value === 'Doctor') {
+        specialty.style.display = '';
+        specialty.required = true;
+      } else {
+        specialty.style.display = 'none';
+        specialty.required = false;
+      }
+    }
+  });
+</script>
 </body>
 </html>

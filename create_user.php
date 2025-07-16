@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
     $designation = trim($_POST['designation']);
+    $specialty = trim($_POST['specialty']);
     $address = trim($_POST['address']);
     $salary = trim($_POST['salary']);
 
@@ -22,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $stmt = $conn->prepare("INSERT INTO users (name, username, password, email, phone, designation, address, salary, employee_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Staff')");
-    $stmt->bind_param("ssssssss", $name, $username, $password, $email, $phone, $designation, $address, $salary);
+    $stmt = $conn->prepare("INSERT INTO users (name, username, password, email, phone, designation,specialty, address, salary, employee_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Staff')");
+    $stmt->bind_param("sssssssss", $name, $username, $password, $email, $phone, $designation,$specialty, $address, $salary);
 
     if ($stmt->execute()) {
         header("Location: admin_dashboard.php");
