@@ -84,6 +84,15 @@ if ($already_punched) {
         <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
       </div>
 <hr>
+<div class="mb-3">
+  <label class="mr-2"><strong>Dark Mode:</strong></label>
+  <input type="radio" name="theme" id="darkOn" value="on">
+  <label for="darkOn" class="mr-3">On</label>
+  <input type="radio" name="theme" id="darkOff" value="off" checked>
+  <label for="darkOff">Off</label> &nbsp;&nbsp; 
+ <a href="staff_dashboard.php" class=" mb-2"><i class="fas fa-sync-alt" title='refresh'></i></a>
+</div>
+<hr>
     <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?> |
     <strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?></p>
     <p><strong>Designation:</strong> <?= htmlspecialchars($user['designation']) ?> |
@@ -111,6 +120,7 @@ if ($already_punched) {
           <th>Phone</th>
           <th>AppointmentDate</th>
           <th>Specialist</th>
+          <th>View Details</th>
 	  </tr>
 	  <?php
 	  $appointments = $conn->query("SELECT * FROM appointments WHERE doctor='$user_specialty' ORDER BY appoint_id ASC");
@@ -123,6 +133,7 @@ if ($already_punched) {
               <td><?= htmlspecialchars($row['phone']) ?></td>
               <td><?= htmlspecialchars($row['date']) ?></td>
               <td><?= htmlspecialchars($row['doctor']) ?></td>
+<td><a href="patient_history.php?phone=<?= urlencode($row['phone']) ?>patient_name=<?= $row['patient_name'] ?>" class="btn btn-info btn-sm">View History</a></td>
             </tr>
           <?php endwhile; ?>
         <?php else: ?>
@@ -133,3 +144,45 @@ if ($already_punched) {
       </table>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var darkOn = document.getElementById('darkOn');
+  var darkOff = document.getElementById('darkOff');
+  var body = document.body;
+
+  function setDarkMode(on) {
+    if (on) {
+      body.style.background = '#222';
+      body.style.color = '#f8f9fa';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '#333';
+        el.style.color = '#f8f9fa';
+      });
+      localStorage.setItem('darkMode', 'on');
+      darkOn.checked = true;
+    } else {
+      body.style.background = '#f8f9fa';
+      body.style.color = '#212529';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '';
+        el.style.color = '';
+      });
+      localStorage.setItem('darkMode', 'off');
+      darkOff.checked = true;
+    }
+  }
+
+  // Restore dark mode on page load
+  var saved = localStorage.getItem('darkMode');
+  if (saved === 'on') {
+    setDarkMode(true);
+  } else {
+    setDarkMode(false);
+  }
+
+  darkOn.addEventListener('change', function() { setDarkMode(true); });
+  darkOff.addEventListener('change', function() { setDarkMode(false); });
+});
+</script>
+
+</body>

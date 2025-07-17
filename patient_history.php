@@ -6,8 +6,8 @@ $phone = isset($_GET['phone']) ? intval($_GET['phone']) : 0;
 $patient_id = isset($_GET['patient_id']) ? intval($_GET['patient_id']) : 0;
 
 // Fetch patient details
-$stmt = $conn->prepare("SELECT * FROM patients WHERE id = ?");
-$stmt->bind_param("i", $patient_id);
+$stmt = $conn->prepare("SELECT * FROM patients WHERE id = ? OR phone = ?");
+$stmt->bind_param("ii", $patient_id,$phone);
 $stmt->execute();
 $patient = $stmt->get_result()->fetch_assoc();
 
@@ -61,7 +61,6 @@ $new_appoint_id = $last_id + 1;
     <h2 class="mb-4">Patient History: <?= htmlspecialchars($patient['name']) ?></h2>
     <p><strong>PatientId:</strong> <?= htmlspecialchars($patient['patient_registration_id']) ?> | <strong>Age:</strong> <?= htmlspecialchars($patient['age']) ?> | <strong>Gender:</strong> <?= htmlspecialchars($patient['gender']) ?> | <strong>Phone:</strong> <?= htmlspecialchars($patient['phone']) ?></p>
     <hr>
-
 <h4 class="mt-5 d-inline-block">New Appointment</h4>
 <button class="btn btn-success btn-sm ml-2" type="button" data-toggle="collapse" data-target="#createStaffForm" aria-expanded="false" aria-controls="createStaffForm">+</button>
 <div class="collapse mt-2" id="createStaffForm">
@@ -96,7 +95,7 @@ $new_appoint_id = $last_id + 1;
 <hr>
     <h4>Appointments History</h4>
     <table class="table table-bordered table-striped">
-        <tr class="table-info"><th>Appointment ID</th><th>Date</th><th>Doctor</th></tr>
+        <tr class="table-active"><th>Appointment ID</th><th>Date</th><th>Doctor</th></tr>
         <?php if ($appointments->num_rows > 0): ?>
 	<?php while ($a = $appointments->fetch_assoc()): ?>
 	<tr>
@@ -114,7 +113,7 @@ $new_appoint_id = $last_id + 1;
     </table>
       <h4 class="mt-4">Medical History & Lab Reports</h4>
 <table class="table   table-bordered table-striped">
-    <tr class="table-success"><th>AppointmentId</th><th>PatientName</th><th>Doctor</th><th>Diagnosis</th><th>Report</th></tr>
+    <tr class="table-active"><th>AppointmentId</th><th>PatientName</th><th>Doctor</th><th>Diagnosis</th><th>Report</th></tr>
 <?php 
 // Fetch lab reports
 $reports = $conn->query("SELECT * FROM patient_history WHERE phone = $phone_number");
@@ -136,7 +135,49 @@ $reports = $conn->query("SELECT * FROM patient_history WHERE phone = $phone_numb
       </tr>
     <?php endif; ?>
   </table>
-    <a href="admin_dashboard.php" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <a href="javascript:history.back()" class="btn btn-warning mt-3">Back to Dashboard</a>
 </div>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var darkOn = document.getElementById('darkOn');
+  var darkOff = document.getElementById('darkOff');
+  var body = document.body;
+
+  function setDarkMode(on) {
+    if (on) {
+      body.style.background = '#222';
+      body.style.color = '#f8f9fa';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '#333';
+        el.style.color = '#f8f9fa';
+      });
+      localStorage.setItem('darkMode', 'on');
+      darkOn.checked = true;
+    } else {
+      body.style.background = '#f8f9fa';
+      body.style.color = '#212529';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '';
+        el.style.color = '';
+      });
+      localStorage.setItem('darkMode', 'off');
+      darkOff.checked = true;
+    }
+  }
+
+  // Restore dark mode on page load
+  var saved = localStorage.getItem('darkMode');
+  if (saved === 'on') {
+    setDarkMode(true);
+  } else {
+    setDarkMode(false);
+  }
+
+  darkOn.addEventListener('change', function() { setDarkMode(true); });
+  darkOff.addEventListener('change', function() { setDarkMode(false); });
+});
+
+
+</script>
 </html>

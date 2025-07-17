@@ -82,6 +82,14 @@ $(document).ready(function(){
 <body>
 <div class="container mt-4">
   <h2 class='text-center'>Admin Dashboard</h2>
+<div class="mb-3">
+  <label class="mr-2"><strong>Dark Mode:</strong></label>
+    <input type="radio" name="theme" id="darkOff" value="off" checked>
+  <label for="darkOff">Off</label>
+<input type="radio" name="theme" id="darkOn" value="on">
+  <label for="darkOn" class="mr-3">On</label>
+
+</div>
 <div class="mb-3" >
 <a href="#" class=" float-left mb-2 mr-2" data-toggle="modal" data-target="#changePasswordModal" title="Settings">
     <i class="fas fa-cog" title='update password'></i>
@@ -177,7 +185,7 @@ $(document).ready(function(){
   <h4 class="mt-5">Staff List</h4>
   <table class="table table-bordered table-striped">
      <thead class="fixed-header">
-      <tr class="table-success">
+      <tr class="table-success text-dark">
         <th>FullName</th>
         <th>UserId</th>
         <th>Email</th>
@@ -220,7 +228,7 @@ $(document).ready(function(){
 
   <table class="table table-bordered  table-striped">
     <thead>
-      <tr class="table-warning">
+      <tr class="table-active">
         <th>UserId</th>
         <th>Punch In</th>
         <th>Punch Out</th>
@@ -270,7 +278,7 @@ $(document).ready(function(){
 <button class="btn btn-success btn-sm ml-2" type="button" data-toggle="collapse" data-target="#showPatientList" aria-expanded="false" aria-controls="showPatientList">+</button>
 <div class="collapse mt-3" id="showPatientList">
   <table class="table table-bordered table-striped">
-    <tr class="table-info"><th>RegistrationID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>History</th></tr>
+    <tr class="table-active"><th>RegistrationID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>History</th></tr>
     <?php
     $patients = $conn->query("SELECT * FROM patients");
     if ($patients->num_rows > 0):
@@ -354,7 +362,7 @@ $(document).ready(function(){
 <button class="btn btn-success btn-sm ml-2" type="button" data-toggle="collapse" data-target="#showReportForm" aria-expanded="false" aria-controls="showReportForm">+</button>
 <div class="collapse mt-3" id="showReportForm">
   <table class="table   table-bordered table-striped">
-    <tr class="table-success"><th>AppointmentId</th><th>PatientName</th><th>Report</th></tr>
+    <tr class="table-active"><th>AppointmentId</th><th>PatientName</th><th>Report</th></tr>
  <?php if ($reports->num_rows > 0): ?>
     <?php while ($r = $reports->fetch_assoc()): ?>
       <tr>
@@ -396,6 +404,44 @@ $(document).ready(function(){
       }
     }
   });
+document.addEventListener('DOMContentLoaded', function () {
+  var darkOn = document.getElementById('darkOn');
+  var darkOff = document.getElementById('darkOff');
+  var body = document.body;
+
+  function setDarkMode(on) {
+    if (on) {
+      body.style.background = '#222';
+      body.style.color = '#f8f9fa';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '#333';
+        el.style.color = '#f8f9fa';
+      });
+      localStorage.setItem('darkMode', 'on');
+      darkOn.checked = true;
+    } else {
+      body.style.background = '#f8f9fa';
+      body.style.color = '#212529';
+      document.querySelectorAll('.card, .table, .form-control, .modal-content').forEach(function(el){
+        el.style.background = '';
+        el.style.color = '';
+      });
+      localStorage.setItem('darkMode', 'off');
+      darkOff.checked = true;
+    }
+  }
+
+  // Restore dark mode on page load
+  var saved = localStorage.getItem('darkMode');
+  if (saved === 'on') {
+    setDarkMode(true);
+  } else {
+    setDarkMode(false);
+  }
+
+  darkOn.addEventListener('change', function() { setDarkMode(true); });
+  darkOff.addEventListener('change', function() { setDarkMode(false); });
+});
 </script>
 </body>
 </html>
